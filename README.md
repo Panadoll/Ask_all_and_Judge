@@ -2,7 +2,13 @@
 <p align="center">
 <img src="./ask-all-and-judge/icons/logo.png" width="200" height="200" />
 <h1 align="center">Ask All & Judge</h1>
-<h3 align="center">Query multiple AI assistants simultaneously and let Judge AI compare responses<br>All using your own subscriptions, no API required!<br><a href="./docs/README_ZH.md">[中文版本]</a><br><a href="https://wangcheng0116.github.io/Ask_all_and_Judge/">[Landing Page]</a></h3>
+<h3 align="center">Query multiple AI assistants simultaneously and let Judge AI compare responses<br>All using your own subscriptions, no API required!<br><a href="./docs/README_ZH.md">[中文版本]</a> | <a href="https://wangcheng0116.github.io/Ask_all_and_Judge/">[Landing Page]</a> | <a href="https://chromewebstore.google.com/detail/ask-all-judge/mnlcnmacdgkpjgknnbajilpaigcmmpgm">[Chrome Web Store]</a></h3>
+</p>
+
+<p align="center">
+<a href="https://chromewebstore.google.com/detail/ask-all-judge/mnlcnmacdgkpjgknnbajilpaigcmmpgm"><img src="https://img.shields.io/chrome-web-store/v/mnlcnmacdgkpjgknnbajilpaigcmmpgm?style=for-the-badge&logo=googlechrome&logoColor=white&label=Chrome%20Web%20Store" alt="Chrome Web Store"></a>
+<a href="https://github.com/WangCheng0116/Ask_all_and_Judge"><img src="https://img.shields.io/github/stars/WangCheng0116/Ask_all_and_Judge?style=for-the-badge&logo=github" alt="GitHub stars"></a>
+<a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License"></a>
 </p>
 
 ## Screenshots
@@ -30,9 +36,13 @@ Stop copying and pasting the same question across multiple AI tabs.
 
 ## 🔧 Installation
 
-**From Chrome Web Store** (Coming soon)
+### Option 1: Chrome Web Store (Recommended)
 
-**Manual Installation**
+[![Install from Chrome Web Store](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/iNEddTyWiMfLSwFD6qGq.png)](https://chromewebstore.google.com/detail/ask-all-judge/mnlcnmacdgkpjgknnbajilpaigcmmpgm)
+
+Click the button above or visit: https://chromewebstore.google.com/detail/ask-all-judge/mnlcnmacdgkpjgknnbajilpaigcmmpgm
+
+### Option 2: Manual Installation
 1. Clone this repository
 2. Open `chrome://extensions/` in Chrome
 3. Enable **Developer mode**

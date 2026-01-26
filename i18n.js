@@ -12,7 +12,8 @@ const translations = {
       title2: "Judge the Best.",
       description: "Query ChatGPT, Claude, Gemini, and other AI assistants simultaneously in a split-screen interface. Let an AI judge compare and evaluate their responses.",
       cta: {
-        install: "Install Extension",
+        install: "Install from Chrome Store",
+        github: "View on GitHub",
         demo: "Watch Demo"
       },
       features: {
@@ -86,7 +87,7 @@ const translations = {
     cta: {
       title: "Ready to enhance your AI workflow?",
       description: "Install the extension and start getting better AI responses today.",
-      button: "Get Started on GitHub"
+      button: "Install from Chrome Store"
     },
     footer: {
       copyright: "© 2026 Ask All & Judge. Open Source Project."
@@ -104,7 +105,8 @@ const translations = {
       title2: "让AI来评判最佳答案。",
       description: "同时向 ChatGPT、Claude、Gemini 等多个 AI 助手提问，在分屏界面中查看所有回答。让 AI 评委比较和评估它们的响应。",
       cta: {
-        install: "安装扩展",
+        install: "从 Chrome 商店安装",
+        github: "在 GitHub 上查看",
         demo: "观看演示"
       },
       features: {
@@ -178,7 +180,7 @@ const translations = {
     cta: {
       title: "准备好增强您的 AI 工作流程了吗？",
       description: "立即安装扩展，开始获得更好的 AI 响应。",
-      button: "在 GitHub 上开始"
+      button: "从 Chrome 商店安装"
     },
     footer: {
       copyright: "© 2026 AI问个遍。开源项目。"
