@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ask All & Judge - AI问个遍</title>
+  <meta name="description" content="Query multiple AI assistants simultaneously and compare their responses with an AI judge">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+              950: '#172554',
+            },
+            slate: {
+              850: '#151e2e',
+              950: '#020617',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .animate-fade-in-up {
+      animation: fadeInUp 0.6s ease-out;
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .delay-1000 {
+      animation-delay: 1s;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-200">
+  <!-- Navbar -->
+  <nav class="fixed top-0 w-full z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800 py-3 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-3 cursor-pointer">
+          <img src="./ask-all-and-judge/icons/logo.png" alt="Ask All & Judge Logo" class="w-10 h-10 rounded-lg">
+          <span class="font-bold text-xl tracking-tight text-white" data-i18n="title">Ask All & Judge</span>
+        </div>
+
+        <div class="flex items-center space-x-6">
+          <a href="#features" class="text-slate-400 hover:text-white font-medium transition-colors hidden md:block" data-i18n="nav.features">Features</a>
+          <a href="#demo" class="text-slate-400 hover:text-white font-medium transition-colors hidden md:block" data-i18n="nav.demo">Demo</a>
+          <a href="https://github.com/WangCheng0116/Ask_all_and_Judge" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-white transition-colors">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
+          <button id="lang-toggle" class="flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span id="lang-text">EN</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative pt-24 pb-12 lg:pt-32 lg:pb-16 overflow-hidden bg-slate-950">
+    <!-- Background decoration -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none">
+      <div class="absolute top-20 left-10 w-96 h-96 bg-primary-600/20 rounded-full blur-[100px] mix-blend-screen opacity-50 animate-pulse"></div>
+      <div class="absolute bottom-40 right-10 w-96 h-96 bg-indigo-600/20 rounded-full blur-[100px] mix-blend-screen opacity-50 animate-pulse delay-1000"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center max-w-3xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-primary-400 text-sm font-medium mb-6 animate-fade-in-up">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
+          </span>
+          <span data-i18n="hero.badge">Chrome Extension v1.0</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight">
+          <span data-i18n="hero.title1">Ask All AIs.</span> <br class="hidden sm:block" />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-indigo-400" data-i18n="hero.title2">Judge the Best.</span>
+        </h1>
+
+        <p class="text-lg sm:text-xl text-slate-400 mb-8 leading-relaxed max-w-2xl mx-auto" data-i18n="hero.description">
+          Query ChatGPT, Claude, Gemini, and other AI assistants simultaneously in a split-screen interface. Let an AI judge compare and evaluate their responses.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+          <a href="https://github.com/WangCheng0116/Ask_all_and_Judge" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-colors group">
+            <span data-i18n="hero.cta.install">Install Extension</span>
+            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="#demo" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-lg transition-colors">
+            <span data-i18n="hero.cta.demo">Watch Demo</span>
+          </a>
+        </div>
+
+        <div class="flex items-center justify-center gap-6 text-sm text-slate-500">
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span data-i18n="hero.features.free">100% Free</span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span data-i18n="hero.features.opensource">Open Source</span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span data-i18n="hero.features.noapi">No API Required</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-12 sm:py-20 bg-slate-950 border-t border-slate-900/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <h2 class="text-base font-semibold text-primary-400 uppercase tracking-wide mb-2" data-i18n="features.subtitle">Features</h2>
+        <h3 class="text-3xl sm:text-4xl font-bold text-white mb-4" data-i18n="features.title">Everything you need in one extension</h3>
+        <p class="text-lg text-slate-400" data-i18n="features.description">Built for power users who want the best AI responses.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="group relative p-8 bg-slate-900/50 rounded-2xl border border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary-500/5 hover:-translate-y-1 transition-all duration-300">
+          <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-indigo-500 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-slate-800 text-primary-400 mb-6 group-hover:bg-primary-600 group-hover:text-white transition-colors duration-300 ring-1 ring-white/5">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-slate-100 mb-3" data-i18n="features.parallel.title">Parallel Querying</h3>
+          <p class="text-slate-400 leading-relaxed" data-i18n="features.parallel.description">Ask multiple AI assistants the same question simultaneously. Save time and get diverse perspectives in one view.</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="group relative p-8 bg-slate-900/50 rounded-2xl border border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary-500/5 hover:-translate-y-1 transition-all duration-300">
+          <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-indigo-500 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-slate-800 text-primary-400 mb-6 group-hover:bg-primary-600 group-hover:text-white transition-colors duration-300 ring-1 ring-white/5">
+            <svg class="w-6 h-6" viewBox="0 0 407.467 407.467" fill="currentColor">
+              <path d="M403.359,320.228L250.938,164.807l41.063-41.063l14.142,14.142l31.82-31.82L231.897,0l-31.819,31.819l14.142,14.142 L97.547,162.634l-14.142-14.142l-31.819,31.82l106.065,106.066l31.82-31.82l-14.142-14.142l40.254-40.254l152.421,155.422 L403.359,320.228z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-slate-100 mb-3" data-i18n="features.judge.title">AI Judge & Compare</h3>
+          <p class="text-slate-400 leading-relaxed" data-i18n="features.judge.description">Let another AI evaluate and compare all responses. Get unbiased analysis on which answer is most accurate and helpful.</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="group relative p-8 bg-slate-900/50 rounded-2xl border border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary-500/5 hover:-translate-y-1 transition-all duration-300">
+          <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-indigo-500 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-slate-800 text-primary-400 mb-6 group-hover:bg-primary-600 group-hover:text-white transition-colors duration-300 ring-1 ring-white/5">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-slate-100 mb-3" data-i18n="features.library.title">Prompt Library</h3>
+          <p class="text-slate-400 leading-relaxed" data-i18n="features.library.description">Save and organize your frequently used prompts. Create shortcuts for instant access to your favorite queries.</p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="group relative p-8 bg-slate-900/50 rounded-2xl border border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary-500/5 hover:-translate-y-1 transition-all duration-300">
+          <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-indigo-500 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-slate-800 text-primary-400 mb-6 group-hover:bg-primary-600 group-hover:text-white transition-colors duration-300 ring-1 ring-white/5">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-slate-100 mb-3" data-i18n="features.export.title">Export & Transfer</h3>
+          <p class="text-slate-400 leading-relaxed" data-i18n="features.export.description">Export conversations to Markdown or transfer responses between AI services. Continue conversations across different platforms seamlessly.</p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="group relative p-8 bg-slate-900/50 rounded-2xl border border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary-500/5 hover:-translate-y-1 transition-all duration-300">
+          <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-indigo-500 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-slate-800 text-primary-400 mb-6 group-hover:bg-primary-600 group-hover:text-white transition-colors duration-300 ring-1 ring-white/5">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-slate-100 mb-3" data-i18n="features.multiple.title">Multiple AI Support</h3>
+          <p class="text-slate-400 leading-relaxed" data-i18n="features.multiple.description">Works with ChatGPT, Claude, Gemini, Qwen, and more. Easily switch between different AI models in each panel.</p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="group relative p-8 bg-slate-900/50 rounded-2xl border border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary-500/5 hover:-translate-y-1 transition-all duration-300">
+          <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-indigo-500 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-slate-800 text-primary-400 mb-6 group-hover:bg-primary-600 group-hover:text-white transition-colors duration-300 ring-1 ring-white/5">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-slate-100 mb-3" data-i18n="features.noapi.title">No API Required</h3>
+          <p class="text-slate-400 leading-relaxed" data-i18n="features.noapi.description">Use your existing AI subscriptions directly through browser sessions. No API keys needed, no extra costs, just your own accounts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo Section -->
+  <section id="demo" class="py-12 sm:py-20 bg-slate-950 border-t border-slate-900/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <h2 class="text-base font-semibold text-primary-400 uppercase tracking-wide mb-2" data-i18n="demo.subtitle">See It In Action</h2>
+        <h3 class="text-3xl sm:text-4xl font-bold text-white mb-4" data-i18n="demo.title">Experience the Power</h3>
+        <p class="text-lg text-slate-400" data-i18n="demo.description">Watch how Ask All & Judge simplifies your AI workflow</p>
+      </div>
+
+      <div class="space-y-8">
+        <!-- Demo 1: Ask All -->
+        <div class="glass-card rounded-2xl p-8 lg:p-12">
+          <div class="grid lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <h4 class="text-2xl font-bold text-white mb-4" data-i18n="demo.askall.title">Query All AIs Simultaneously</h4>
+              <p class="text-slate-400 mb-6" data-i18n="demo.askall.description">Send your question to multiple AI assistants at once. View all responses side-by-side in a clean, organized interface.</p>
+              <ul class="space-y-3">
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span class="text-slate-300" data-i18n="demo.askall.feature1">Split-screen layout with 2-4 panels</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span class="text-slate-300" data-i18n="demo.askall.feature2">Real-time response streaming</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span class="text-slate-300" data-i18n="demo.askall.feature3">Easy panel customization</span>
+                </li>
+              </ul>
+            </div>
+            <div class="rounded-xl overflow-hidden border border-slate-700 shadow-2xl">
+              <img src="./media/demo-parallel-query.gif" alt="Ask All Demo" class="w-full h-auto">
+            </div>
+          </div>
+        </div>
+
+        <!-- Demo 2: Judge Feature -->
+        <div class="glass-card rounded-2xl p-8 lg:p-12">
+          <div class="grid lg:grid-cols-2 gap-8 items-center">
+            <div class="order-2 lg:order-1 rounded-xl overflow-hidden border border-slate-700 shadow-2xl">
+              <img src="./media/demo-judge.gif" alt="Judge Feature Demo" class="w-full h-auto">
+            </div>
+            <div class="order-1 lg:order-2">
+              <h4 class="text-2xl font-bold text-white mb-4" data-i18n="demo.judge.title">AI Judge Comparison</h4>
+              <p class="text-slate-400 mb-6" data-i18n="demo.judge.description">Get an impartial AI to analyze and compare all responses. Discover which answer is most accurate, comprehensive, and helpful.</p>
+              <ul class="space-y-3">
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span class="text-slate-300" data-i18n="demo.judge.feature1">Objective comparison analysis</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span class="text-slate-300" data-i18n="demo.judge.feature2">Detailed evaluation criteria</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span class="text-slate-300" data-i18n="demo.judge.feature3">Customizable judge prompts</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Demo 3: Prompt Library -->
+        <div class="glass-card rounded-2xl p-8 lg:p-12">
+          <div class="grid lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <h4 class="text-2xl font-bold text-white mb-4" data-i18n="demo.library.title">Prompt Library & Shortcuts</h4>
+              <p class="text-slate-400 mb-6" data-i18n="demo.library.description">Save your best prompts and create keyboard shortcuts. Access your prompt collection instantly whenever you need it.</p>
+              <ul class="space-y-3">
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span class="text-slate-300" data-i18n="demo.library.feature1">Save unlimited prompts</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span class="text-slate-300" data-i18n="demo.library.feature2">Quick search and filtering</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span class="text-slate-300" data-i18n="demo.library.feature3">Keyboard shortcuts for favorites</span>
+                </li>
+              </ul>
+            </div>
+            <div class="rounded-xl overflow-hidden border border-slate-700 shadow-2xl">
+              <img src="./media/demo-prompt-library.gif" alt="Prompt Library Demo" class="w-full h-auto">
+            </div>
+          </div>
+        </div>
+
+        <!-- Demo 4: Export & Transfer -->
+        <div class="glass-card rounded-2xl p-8 lg:p-12">
+          <div class="grid lg:grid-cols-2 gap-8 items-center">
+            <div class="order-2 lg:order-1 rounded-xl overflow-hidden border border-slate-700 shadow-2xl">
+              <img src="./media/demo-export-convo.gif" alt="Export & Transfer Demo" class="w-full h-auto">
+            </div>
+            <div class="order-1 lg:order-2">
+              <h4 class="text-2xl font-bold text-white mb-4" data-i18n="demo.export.title">Export & Transfer Conversations</h4>
+              <p class="text-slate-400 mb-6" data-i18n="demo.export.description">Seamlessly move conversations between AI platforms or save them as Markdown. Continue discussions where they make most sense.</p>
+              <ul class="space-y-3">
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span class="text-slate-300" data-i18n="demo.export.feature1">Transfer responses between AIs</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span class="text-slate-300" data-i18n="demo.export.feature2">Export as Markdown format</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span class="text-slate-300" data-i18n="demo.export.feature3">One-click conversation copy</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 bg-slate-950 border-t border-slate-900/50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4" data-i18n="cta.title">Ready to enhance your AI workflow?</h2>
+      <p class="text-lg text-slate-400 mb-8" data-i18n="cta.description">Install the extension and start getting better AI responses today.</p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="https://github.com/WangCheng0116/Ask_all_and_Judge" class="inline-flex items-center gap-2 px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-colors">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          <span data-i18n="cta.button">Get Started on GitHub</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 bg-slate-950 border-t border-slate-900/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-3">
+          <img src="./ask-all-and-judge/icons/logo.png" alt="Ask All & Judge Logo" class="w-9 h-9 rounded-lg">
+          <span class="font-bold text-lg text-white" data-i18n="title">Ask All & Judge</span>
+        </div>
+        <div class="text-slate-400 text-sm">
+          <span data-i18n="footer.copyright">© 2026 Ask All & Judge. Open Source Project.</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="https://github.com/WangCheng0116/Ask_all_and_Judge" class="text-slate-400 hover:text-white transition-colors">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./i18n.js"></script>
+</body>
+</html>

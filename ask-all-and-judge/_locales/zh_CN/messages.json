@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "AI问个遍",
+    "description": "扩展的名称"
+  },
+  "appDesc": {
+    "message": "同时向所有AI提问，让AI评委对比答案 - 使用你自己的订阅账号，无需API",
+    "description": "扩展的描述"
+  }
+}

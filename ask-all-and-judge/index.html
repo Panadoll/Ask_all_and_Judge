@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ask All & Judge - AI问个遍</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body data-layout="3">
+  <main class="frame-grid">
+    <section class="frame-panel" data-panel="1" data-ai="chatgpt">
+      <header class="frame-header">
+        <div class="ai-select-wrapper" data-panel="1">
+          <button class="ai-select-trigger" type="button" aria-expanded="false">
+            <span class="frame-badge" aria-hidden="true">
+              <span class="ai-mark"></span>
+              <span class="status-dot"></span>
+            </span>
+            <span class="frame-title">ChatGPT</span>
+            <span class="ai-select-trigger-arrow" aria-hidden="true"></span>
+          </button>
+          <div class="ai-select-dropdown"></div>
+          <select class="ai-select" data-panel="1" aria-label="Select AI for panel 1"></select>
+        </div>
+        <div class="frame-actions">
+          <button class="frame-action-button" data-action="export" type="button" aria-label="Export">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </button>
+          <button class="frame-action-button" data-action="refresh" type="button" aria-label="Refresh">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+              <path d="M16 21h5v-5"/>
+            </svg>
+          </button>
+          <button class="frame-action-button" data-action="fullscreen" type="button" aria-label="Fullscreen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+            </svg>
+          </button>
+          <button class="frame-action-button" data-action="close" type="button" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+      <iframe
+        id="iframe-panel-1"
+        src="https://chatgpt.com"
+        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
+        allow="clipboard-read; clipboard-write"
+      ></iframe>
+    </section>
+
+    <section class="frame-panel" data-panel="2" data-ai="claude">
+      <header class="frame-header">
+        <div class="ai-select-wrapper" data-panel="2">
+          <button class="ai-select-trigger" type="button" aria-expanded="false">
+            <span class="frame-badge" aria-hidden="true">
+              <span class="ai-mark"></span>
+              <span class="status-dot"></span>
+            </span>
+            <span class="frame-title">Claude</span>
+            <span class="ai-select-trigger-arrow" aria-hidden="true"></span>
+          </button>
+          <div class="ai-select-dropdown"></div>
+          <select class="ai-select" data-panel="2" aria-label="Select AI for panel 2"></select>
+        </div>
+        <div class="frame-actions">
+          <button class="frame-action-button" data-action="export" type="button" aria-label="Export">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </button>
+          <button class="frame-action-button" data-action="refresh" type="button" aria-label="Refresh">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+              <path d="M16 21h5v-5"/>
+            </svg>
+          </button>
+          <button class="frame-action-button" data-action="fullscreen" type="button" aria-label="Fullscreen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+            </svg>
+          </button>
+          <button class="frame-action-button" data-action="close" type="button" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+      <iframe
+        id="iframe-panel-2"
+        src="https://claude.ai/new"
+        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
+        allow="clipboard-read; clipboard-write"
+      ></iframe>
+    </section>
+
+    <section class="frame-panel" data-panel="3" data-ai="gemini">
+      <header class="frame-header">
+        <div class="ai-select-wrapper" data-panel="3">
+          <button class="ai-select-trigger" type="button" aria-expanded="false">
+            <span class="frame-badge" aria-hidden="true">
+              <span class="ai-mark"></span>
+              <span class="status-dot"></span>
+            </span>
+            <span class="frame-title">Gemini</span>
+            <span class="ai-select-trigger-arrow" aria-hidden="true"></span>
+          </button>
+          <div class="ai-select-dropdown"></div>
+          <select class="ai-select" data-panel="3" aria-label="Select AI for panel 3"></select>
+        </div>
+        <div class="frame-actions">
+          <button class="frame-action-button" data-action="export" type="button" aria-label="Export">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </button>
+          <button class="frame-action-button" data-action="refresh" type="button" aria-label="Refresh">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+              <path d="M16 21h5v-5"/>
+            </svg>
+          </button>
+          <button class="frame-action-button" data-action="fullscreen" type="button" aria-label="Fullscreen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+            </svg>
+          </button>
+          <button class="frame-action-button" data-action="close" type="button" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+      <iframe
+        id="iframe-panel-3"
+        src="https://gemini.google.com/app"
+        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
+        allow="clipboard-read; clipboard-write"
+      ></iframe>
+    </section>
+
+    <section class="frame-panel" data-panel="4" data-ai="qwen">
+      <header class="frame-header">
+        <div class="ai-select-wrapper" data-panel="4">
+          <button class="ai-select-trigger" type="button" aria-expanded="false">
+            <span class="frame-badge" aria-hidden="true">
+              <span class="ai-mark"></span>
+              <span class="status-dot"></span>
+            </span>
+            <span class="frame-title">Qwen</span>
+            <span class="ai-select-trigger-arrow" aria-hidden="true"></span>
+          </button>
+          <div class="ai-select-dropdown"></div>
+          <select class="ai-select" data-panel="4" aria-label="Select AI for panel 4"></select>
+        </div>
+        <div class="frame-actions">
+          <button class="frame-action-button" data-action="export" type="button" aria-label="Export">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </button>
+          <button class="frame-action-button" data-action="refresh" type="button" aria-label="Refresh">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+              <path d="M16 21h5v-5"/>
+            </svg>
+          </button>
+          <button class="frame-action-button" data-action="fullscreen" type="button" aria-label="Fullscreen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+            </svg>
+          </button>
+          <button class="frame-action-button" data-action="close" type="button" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+      <iframe
+        id="iframe-panel-4"
+        src="https://chat.qwen.ai/"
+        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
+        allow="clipboard-read; clipboard-write"
+      ></iframe>
+    </section>
+  </main>
+
+  <footer class="composer">
+    <div class="composer-resizer" aria-hidden="true"></div>
+    <div
+      id="prompt-suggestions"
+      class="prompt-suggestions"
+      aria-hidden="true"
+    >
+      <div
+        id="prompt-suggestions-list"
+        class="prompt-suggestions-list"
+        role="listbox"
+        aria-label="Prompt suggestions"
+      ></div>
+    </div>
+    <div class="composer-row">
+      <div class="prompt-library">
+        <button
+          id="prompt-library-toggle"
+          class="prompt-library-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+          title="Prompt library"
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M6 4.5h8.2a3.3 3.3 0 0 1 3.3 3.3v11.2a1.5 1.5 0 0 1-1.5 1.5H7.5A2.5 2.5 0 0 0 5 23"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M6 4.5A2.5 2.5 0 0 0 3.5 7v13.5A2.5 2.5 0 0 1 6 18h9"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        <div
+          id="prompt-library-panel"
+          class="prompt-library-panel"
+          role="dialog"
+          aria-label="Prompt library"
+          aria-hidden="true"
+        >
+          <div class="prompt-library-header">
+            <div id="prompt-library-title" class="prompt-library-title">Prompt library</div>
+            <button id="prompt-library-close" class="panel-close-button" type="button" aria-label="Close">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+          <div class="prompt-library-form">
+            <div class="prompt-library-field">
+              <label id="prompt-title-label" class="prompt-library-label" for="prompt-title">Title</label>
+              <input
+                id="prompt-title"
+                class="prompt-library-input"
+                type="text"
+                placeholder="Optional name"
+                autocomplete="off"
+              >
+            </div>
+            <div class="prompt-library-field">
+              <label id="prompt-shortcut-label" class="prompt-library-label" for="prompt-shortcut">Shortcut</label>
+              <input
+                id="prompt-shortcut"
+                class="prompt-library-input"
+                type="text"
+                placeholder="Keyword"
+                autocomplete="off"
+              >
+            </div>
+            <div class="prompt-library-field prompt-library-field-wide">
+              <label id="prompt-text-label" class="prompt-library-label" for="prompt-text">Prompt</label>
+              <textarea
+                id="prompt-text"
+                class="prompt-library-textarea"
+                rows="3"
+                placeholder="Write the full prompt"
+              ></textarea>
+              <div class="prompt-library-footer-row">
+                <div id="prompt-text-example" class="prompt-library-example"></div>
+                <div class="prompt-library-actions-row">
+                  <button
+                    id="prompt-save"
+                    class="prompt-library-action prompt-library-action-primary"
+                    type="button"
+                  >
+                    Add
+                  </button>
+                  <button
+                    id="prompt-cancel"
+                    class="prompt-library-action prompt-library-action-ghost"
+                    type="button"
+                    hidden
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div id="prompt-library-help" class="prompt-library-help prompt-library-field-wide"></div>
+          </div>
+          <div class="prompt-library-search-row">
+            <input
+              id="prompt-library-search"
+              class="prompt-library-search"
+              type="search"
+              placeholder="Search prompts"
+              autocomplete="off"
+            >
+          </div>
+          <div id="prompt-library-list" class="prompt-library-list"></div>
+          <div id="prompt-library-empty" class="prompt-library-empty">No prompts yet.</div>
+        </div>
+      </div>
+      <textarea
+        id="query-input"
+        placeholder="Loading AI panels..."
+        rows="1"
+      ></textarea>
+      <div class="composer-actions">
+        <button id="send-button" class="send-button" type="button">Send</button>
+        <div class="judge-wrapper">
+          <button
+            id="judge-button"
+            class="judge-button"
+            type="button"
+            title="Judge & Compare AI Responses"
+            aria-label="Judge and compare"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 407.467 407.467" fill="currentColor">
+              <path d="M403.359,320.228L250.938,164.807l41.063-41.063l14.142,14.142l31.82-31.82L231.897,0l-31.819,31.819l14.142,14.142 L97.547,162.634l-14.142-14.142l-31.819,31.82l106.065,106.066l31.82-31.82l-14.142-14.142l40.254-40.254l152.421,155.422 L403.359,320.228z M221.29,31.819l10.606-10.606l84.854,84.853l-10.607,10.607l-3.535-3.535l0,0l-77.781-77.782l0,0L221.29,31.819z M168.258,254.558l-10.607,10.607l-84.853-84.853l10.606-10.607l3.536,3.536l77.782,77.782L168.258,254.558z M108.153,173.241 L224.826,56.568l56.568,56.569l-40.96,40.96l0,0l-17.677,17.678l-58.035,58.035L108.153,173.241z M240.33,175.414l141.919,144.711 l-14.143,14.142L226.189,189.556L240.33,175.414z"/>
+              <path d="M180.109,332.467h-156v30h-20v45h200v-45h-24V332.467z M39.109,347.467h126v15h-126V347.467z M189.109,377.467v15h-170v-15 h5h156H189.109z"/>
+            </svg>
+          </button>
+          <div id="judge-model-selection-popup" class="judge-model-selection-popup" role="dialog" aria-label="Select Judge AI" aria-hidden="true">
+            <div class="judge-model-selection-title">Select Judge AI</div>
+            <div id="judge-model-selection-list" class="judge-model-selection-list"></div>
+          </div>
+        </div>
+        <div class="add-panel-wrapper">
+          <button id="add-panel-button" class="add-panel-button" type="button" title="Add panel" aria-expanded="false" aria-haspopup="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+          <div id="add-panel-popup" class="add-panel-popup" role="dialog" aria-label="Add AI Panel" aria-hidden="true">
+            <div class="add-panel-title">Add AI Panel</div>
+            <div id="add-panel-list" class="add-panel-list"></div>
+          </div>
+        </div>
+        <div class="layout-controls" role="group" aria-label="Layout">
+          <button class="layout-button" data-layout="2" type="button" title="2 panels">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="5" width="8" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+              <rect x="13" y="5" width="8" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </button>
+          <button class="layout-button is-active" data-layout="3" type="button" title="3 panels">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="5" width="5.5" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+              <rect x="9" y="5" width="5.5" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+              <rect x="16" y="5" width="5.5" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </button>
+          <button class="layout-button" data-layout="4" type="button" title="4 panels">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="5" width="4" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+              <rect x="7.5" y="5" width="4" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+              <rect x="13" y="5" width="4" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+              <rect x="18.5" y="5" width="4" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </button>
+        </div>
+        <div class="settings">
+          <button
+            id="settings-button"
+            class="settings-button"
+            type="button"
+            aria-expanded="false"
+            aria-haspopup="true"
+            title="Settings"
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+              <path
+                d="M19.4 15a1 1 0 0 0 .2 1.1l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1 1 0 0 0-1.1-.2 1 1 0 0 0-.6.9V21a2 2 0 0 1-4 0v-.1a1 1 0 0 0-.6-.9 1 1 0 0 0-1.1.2l-.1.1a2 2 0 0 1-2.8-2.8l.1-.1a1 1 0 0 0 .2-1.1 1 1 0 0 0-.9-.6H3a2 2 0 0 1 0-4h.1a1 1 0 0 0 .9-.6 1 1 0 0 0-.2-1.1l-.1-.1a2 2 0 0 1 2.8-2.8l.1.1a1 1 0 0 0 1.1.2 1 1 0 0 0 .6-.9V3a2 2 0 0 1 4 0v.1a1 1 0 0 0 .6.9 1 1 0 0 0 1.1-.2l.1-.1a2 2 0 0 1 2.8 2.8l-.1.1a1 1 0 0 0-.2 1.1 1 1 0 0 0 .9.6H21a2 2 0 0 1 0 4h-.1a1 1 0 0 0-.9.6z"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <div
+            id="settings-panel"
+            class="settings-panel"
+            role="dialog"
+            aria-label="Settings"
+            aria-hidden="true"
+          >
+            <div class="settings-header">
+              <div id="settings-title" class="settings-title">Settings</div>
+              <button id="settings-close" class="panel-close-button" type="button" aria-label="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+            <div class="settings-content">
+            <div class="settings-field">
+              <label id="settings-ui-label" class="settings-label" for="ui-language">
+                Interface language
+              </label>
+              <div class="settings-custom-select" id="settings-language-wrapper">
+                <button class="settings-select-trigger settings-simple-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                  <span class="settings-select-label"></span>
+                  <svg class="settings-select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                <div class="settings-select-dropdown settings-simple-dropdown" role="listbox"></div>
+                <select id="ui-language" class="settings-ai-select" hidden>
+                  <option value="en">English</option>
+                  <option value="zh">中文</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-field">
+              <label id="settings-theme-label" class="settings-label" for="ui-theme">
+                Theme
+              </label>
+              <div class="settings-custom-select" id="settings-theme-wrapper">
+                <button class="settings-select-trigger settings-simple-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                  <span class="settings-select-label"></span>
+                  <svg class="settings-select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                <div class="settings-select-dropdown settings-simple-dropdown" role="listbox"></div>
+                <select id="ui-theme" class="settings-ai-select" hidden>
+                  <option value="auto">Auto</option>
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-field">
+              <label id="settings-layout-label" class="settings-label">Default layout on open</label>
+              <div id="settings-layout-options" class="settings-layout-options">
+                <button class="settings-layout-button" data-layout="2" type="button" title="2 panels">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="5" width="8" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+                    <rect x="13" y="5" width="8" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </button>
+                <button class="settings-layout-button" data-layout="3" type="button" title="3 panels">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="5" width="5.5" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+                    <rect x="9" y="5" width="5.5" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+                    <rect x="16" y="5" width="5.5" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </button>
+                <button class="settings-layout-button" data-layout="4" type="button" title="4 panels">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="5" width="4" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+                    <rect x="7.5" y="5" width="4" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+                    <rect x="13" y="5" width="4" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+                    <rect x="18.5" y="5" width="4" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div id="settings-ai-config" class="settings-field settings-ai-config" hidden>
+              <div id="settings-ai-list" class="settings-ai-list">
+                <div class="settings-ai-row" data-row="1">
+                  <span class="settings-ai-row-label">Panel 1</span>
+                  <div class="settings-custom-select" id="settings-ai-wrapper-1">
+                    <button class="settings-select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                      <div class="settings-select-trigger-content">
+                        <div class="settings-select-icon"></div>
+                        <span class="settings-select-label"></span>
+                      </div>
+                      <svg class="settings-select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </button>
+                    <div class="settings-select-dropdown" role="listbox"></div>
+                    <select id="settings-ai-select-1" class="settings-ai-select" hidden></select>
+                  </div>
+                </div>
+                <div class="settings-ai-row" data-row="2">
+                  <span class="settings-ai-row-label">Panel 2</span>
+                  <div class="settings-custom-select" id="settings-ai-wrapper-2">
+                    <button class="settings-select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                      <div class="settings-select-trigger-content">
+                        <div class="settings-select-icon"></div>
+                        <span class="settings-select-label"></span>
+                      </div>
+                      <svg class="settings-select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </button>
+                    <div class="settings-select-dropdown" role="listbox"></div>
+                    <select id="settings-ai-select-2" class="settings-ai-select" hidden></select>
+                  </div>
+                </div>
+                <div class="settings-ai-row" data-row="3">
+                  <span class="settings-ai-row-label">Panel 3</span>
+                  <div class="settings-custom-select" id="settings-ai-wrapper-3">
+                    <button class="settings-select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                      <div class="settings-select-trigger-content">
+                        <div class="settings-select-icon"></div>
+                        <span class="settings-select-label"></span>
+                      </div>
+                      <svg class="settings-select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </button>
+                    <div class="settings-select-dropdown" role="listbox"></div>
+                    <select id="settings-ai-select-3" class="settings-ai-select" hidden></select>
+                  </div>
+                </div>
+                <div class="settings-ai-row" data-row="4">
+                  <span class="settings-ai-row-label">Panel 4</span>
+                  <div class="settings-custom-select" id="settings-ai-wrapper-4">
+                    <button class="settings-select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                      <div class="settings-select-trigger-content">
+                        <div class="settings-select-icon"></div>
+                        <span class="settings-select-label"></span>
+                      </div>
+                      <svg class="settings-select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </button>
+                    <div class="settings-select-dropdown" role="listbox"></div>
+                    <select id="settings-ai-select-4" class="settings-ai-select" hidden></select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="settings-field">
+              <label id="settings-judge-template-label" class="settings-label" for="judge-prompt-template">
+                Judge Prompt Template
+              </label>
+              <textarea
+                id="judge-prompt-template"
+                class="prompt-library-textarea"
+                rows="6"
+                placeholder="Enter judge prompt template. Use {conversations} as placeholder for AI conversations."
+              ></textarea>
+              <div class="settings-help-text" style="margin-top: 8px; font-size: 12px; color: var(--muted);">
+                Use <code>{conversations}</code> as a placeholder where collected AI conversations will be inserted.
+              </div>
+            </div>
+            <div class="settings-field">
+              <button id="show-tutorial-button" class="settings-action-button" type="button">
+                Restart Tutorial
+              </button>
+            </div>
+            <div class="settings-field">
+              <a
+                href="https://github.com/WangCheng0116/Ask_all_and_Judge"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="settings-action-button"
+                style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; justify-content: center;"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" style="width: 18px; height: 18px;">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                <span data-i18n="viewSourceCode">View Source Code</span>
+              </a>
+            </div>
+            <div class="settings-actions">
+              <button id="settings-save-button" class="settings-save-button" type="button">Save</button>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="status-text" class="status-text" aria-live="polite"></div>
+  </footer>
+
+  <!-- Judge Panel -->
+  <aside id="judge-panel" class="judge-panel" hidden>
+    <div class="judge-resizer" aria-hidden="true"></div>
+    <header class="judge-header">
+      <button
+        id="judge-back-button"
+        class="judge-back-button"
+        type="button"
+        aria-label="Close judge panel"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </button>
+      <div class="ai-select-wrapper" id="judge-ai-select-wrapper">
+        <button class="ai-select-trigger" type="button" aria-expanded="false">
+          <span class="frame-badge" aria-hidden="true">
+            <span class="ai-mark"></span>
+            <span class="status-dot"></span>
+          </span>
+          <span class="frame-title">Judge AI</span>
+          <span class="ai-select-trigger-arrow" aria-hidden="true"></span>
+        </button>
+        <div class="ai-select-dropdown"></div>
+        <select class="ai-select" id="judge-ai-select" aria-label="Select AI for judge"></select>
+      </div>
+      <button
+        id="judge-collect-button"
+        class="judge-collect-button"
+        type="button"
+        title="Import and judge conversations"
+        aria-label="Import and judge"
+      >
+        <span>Import and Judge</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(180deg);">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+      </button>
+    </header>
+    <iframe
+      id="judge-iframe"
+      src=""
+      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
+      allow="clipboard-read; clipboard-write"
+    ></iframe>
+  </aside>
+
+  <script src="src/utils.js" type="module"></script>
+  <script src="src/main.js" type="module"></script>
+</body>
+</html>
