@@ -4,6 +4,8 @@
 
 **Ask All & Judge** - Chrome Extension
 
+🌐 **[Visit Product Page](https://wangcheng0116.github.io/Ask_all_and_Judge/)** | [中文文档](./docs/README_ZH.md)
+
 ---
 
 ## 🎯 Why Ask All & Judge?
