@@ -1,12 +1,14 @@
-# Ask All & Judge (AI问个遍)
+#
+<p align="center">
+<img src="./ask-all-and-judge/icons/logo.png" width="200" height="200" />
+<h1 align="center">Ask All & Judge</h1>
+<h3 align="center">Query multiple AI assistants simultaneously and let Judge AI compare responses<br>All using your own subscriptions, no API required!<br><a href="./docs/README_ZH.md">[中文版本]</a><br><a href="https://wangcheng0116.github.io/Ask_all_and_Judge/">[Landing Page]</a></h3>
+</p>
 
-> Ask all AIs simultaneously and let Judge AI compare responses - all using your own subscriptions, no API required.
-
-**Ask All & Judge** - Chrome Extension
-
-🌐 **[Visit Product Page](https://wangcheng0116.github.io/Ask_all_and_Judge/)** | [中文文档](./docs/README_ZH.md)
-
----
+## Screenshots
+<p align="center">
+<img src="./media/demo-parallel-query.gif" alt="Ask All & Judge Demo" width="840"/>
+</p>
 
 ## 🎯 Why Ask All & Judge?
 
