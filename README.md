@@ -38,11 +38,18 @@ Stop copying and pasting the same question across multiple AI tabs.
 
 ### Option 1: Chrome Web Store (Recommended)
 
-[![Install from Chrome Web Store](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/iNEddTyWiMfLSwFD6qGq.png)](https://chromewebstore.google.com/detail/ask-all-judge/mnlcnmacdgkpjgknnbajilpaigcmmpgm)
+[Install from Chrome Web Store](https://chromewebstore.google.com/detail/ask-all-judge/mnlcnmacdgkpjgknnbajilpaigcmmpgm)
 
-Click the button above or visit: https://chromewebstore.google.com/detail/ask-all-judge/mnlcnmacdgkpjgknnbajilpaigcmmpgm
+### Option 2: Download from GitHub Releases
 
-### Option 2: Manual Installation
+Download the latest `ask-all-and-judge.zip` from [Releases](https://github.com/WangCheng0116/Ask_all_and_Judge/releases), then:
+1. Extract the ZIP file
+2. Open `chrome://extensions/` in Chrome
+3. Enable **Developer mode**
+4. Click **Load unpacked** and select the extracted `ask-all-and-judge` folder
+
+### Option 3: Manual Installation from Source
+
 1. Clone this repository
 2. Open `chrome://extensions/` in Chrome
 3. Enable **Developer mode**
