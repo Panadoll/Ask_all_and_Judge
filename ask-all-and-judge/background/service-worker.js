@@ -9,7 +9,8 @@ const AI_LIST = [
   'gemini',
   'qwen',
   'deepseek',
-  'doubao'
+  'doubao',
+  'grok'
 ];
 
 // Get AI frame state template
@@ -26,7 +27,7 @@ chrome.runtime.onInstalled.addListener(() => {
   console.log('Setting up declarativeNetRequest rules...');
 
   chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+    removeRuleIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
     addRules: [
       {
         id: 1,
@@ -229,6 +230,35 @@ chrome.runtime.onInstalled.addListener(() => {
         },
         condition: {
           urlFilter: '*://doubao.com/*',
+          resourceTypes: ['sub_frame', 'main_frame']
+        }
+      },
+      {
+        id: 23,
+        priority: 1,
+        action: {
+          type: 'modifyHeaders',
+          responseHeaders: [
+            { header: 'X-Frame-Options', operation: 'remove' },
+            { header: 'Frame-Options', operation: 'remove' }
+          ]
+        },
+        condition: {
+          urlFilter: '*://grok.com/*',
+          resourceTypes: ['sub_frame', 'main_frame']
+        }
+      },
+      {
+        id: 24,
+        priority: 1,
+        action: {
+          type: 'modifyHeaders',
+          responseHeaders: [
+            { header: 'content-security-policy', operation: 'remove' }
+          ]
+        },
+        condition: {
+          urlFilter: '*://grok.com/*',
           resourceTypes: ['sub_frame', 'main_frame']
         }
       }

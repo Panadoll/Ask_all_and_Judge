@@ -43,6 +43,13 @@ export const AI_CATALOG = {
     url: 'https://www.doubao.com/',
     icon: 'icons/ai/doubao.png',
     exportFormat: 'markdown'
+  },
+  grok: {
+    id: 'grok',
+    label: 'Grok',
+    url: 'https://grok.com/',
+    icon: 'icons/ai/grok-color.svg',
+    exportFormat: 'markdown'
   }
 };
 
@@ -51,5 +58,6 @@ export const DEFAULT_SELECTIONS = ['chatgpt', 'gemini', 'claude', 'qwen'];
 export const EXTRA_AI_SERVICES = {
   qwen: { hostname: 'chat.qwen.ai' },
   doubao: { hostname: 'www.doubao.com' },
-  deepseek: { hostname: 'chat.deepseek.com' }
+  deepseek: { hostname: 'chat.deepseek.com' },
+  grok: { hostname: 'grok.com' }
 };

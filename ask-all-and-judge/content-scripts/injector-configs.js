@@ -239,9 +239,51 @@ export const INJECTOR_CONFIGS = {
       userMessages: '[class*="user-message"]',
       assistantMessages: '[class*="assistant-message"]'
     }
+  },
+
+  grok: {
+    displayName: 'Grok',
+    inputSelectors: [
+      'div.tiptap.ProseMirror',
+      'div[contenteditable="true"].ProseMirror',
+      'div[role="textbox"][contenteditable="true"]',
+      'div[contenteditable="true"]',
+      'textarea'
+    ],
+    submitSelectors: [
+      'button[aria-label*="Submit" i]',
+      'button[aria-label*="提交"]',
+      'button[aria-label*="Send" i]',
+      'button[aria-label*="发送"]',
+      'button[type="submit"]'
+    ],
+    responseSelectors: [
+      'div.message-bubble',
+      '[class*="response"]',
+      '[class*="assistant"]',
+      'div[class*="markdown"]',
+      'div.prose'
+    ],
+    stopButtonSelectors: [
+      'button[aria-label*="Stop" i]',
+      'button[aria-label*="停止"]'
+    ],
+    inputType: 'contenteditable',
+    useExecCommand: true,
+    loginIndicators: {
+      loggedOut: [
+        'a[href*="sign-in"]',
+        'a[href*="sign-up"]',
+        'a[href*="/login"]'
+      ],
+      loggedOutText: ['sign in', 'sign up', 'log in', '登录']
+    },
+    conversationSelectors: {
+      userMessages: '[class*="user"]',
+      assistantMessages: '[class*="assistant"]'
+    }
   }
 };
-
 /**
  * Get configuration for a specific AI
  */

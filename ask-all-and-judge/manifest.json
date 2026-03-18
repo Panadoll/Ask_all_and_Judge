@@ -18,7 +18,8 @@
     "https://chat.qwen.ai/*",
     "https://www.doubao.com/*",
     "https://doubao.com/*",
-    "https://chat.deepseek.com/*"
+    "https://chat.deepseek.com/*",
+    "https://grok.com/*"
   ],
   "background": {
     "service_worker": "background/service-worker.js"
@@ -65,6 +66,12 @@
     {
       "matches": ["https://chat.deepseek.com/*"],
       "js": ["content-scripts/common.js", "content-scripts/ai/deepseek-injector.js"],
+      "all_frames": true,
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://grok.com/*"],
+      "js": ["content-scripts/common.js", "content-scripts/ai/grok-injector.js"],
       "all_frames": true,
       "run_at": "document_idle"
     }
