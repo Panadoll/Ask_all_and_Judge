@@ -190,6 +190,58 @@ export function setupSettings() {
           restartOnboarding();
       });
   }
+
+  // Site configuration grid
+  setupSiteGrid();
+}
+
+// Build the site enable/disable grid in settings
+function setupSiteGrid() {
+  const grid = document.getElementById('settings-site-grid');
+  if (!grid) return;
+
+  // Load enabled sites from chrome.storage.local
+  chrome.storage.local.get('enabledSites', (result) => {
+    const enabledSites = result.enabledSites || DEFAULT_SELECTIONS;
+    buildSiteGrid(grid, enabledSites);
+  });
+}
+
+function buildSiteGrid(grid, enabledSites) {
+  grid.innerHTML = '';
+  
+  Object.entries(AI_CATALOG).forEach(([key, config]) => {
+    const isEnabled = enabledSites.includes(key);
+    const item = document.createElement('div');
+    item.className = `settings-site-item${isEnabled ? ' is-enabled' : ''}`;
+    item.dataset.siteId = key;
+    
+    item.innerHTML = `
+      <div class="settings-site-item-icon">
+        <img src="${config.icon}" alt="" onerror="this.style.display='none'">
+      </div>
+      <span class="settings-site-item-name">${getModelLabel(key)}</span>
+      <div class="settings-site-item-toggle"></div>
+    `;
+    
+    item.addEventListener('click', () => {
+      item.classList.toggle('is-enabled');
+      saveSiteConfig(grid);
+    });
+    
+    grid.appendChild(item);
+  });
+}
+
+function saveSiteConfig(grid) {
+  const enabledSites = [];
+  grid.querySelectorAll('.settings-site-item.is-enabled').forEach(item => {
+    enabledSites.push(item.dataset.siteId);
+  });
+  
+  chrome.storage.local.set({ enabledSites }, () => {
+    showToast(getUIText('settingsSaved'), 'success');
+  });
 }
 
 function setupCustomSelect(nativeSelect, wrapper) {

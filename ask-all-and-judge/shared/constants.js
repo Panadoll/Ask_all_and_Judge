@@ -50,14 +50,70 @@ export const AI_CATALOG = {
     url: 'https://grok.com/',
     icon: 'icons/ai/grok-color.svg',
     exportFormat: 'markdown'
+  },
+  copilot: {
+    id: 'copilot',
+    label: 'Copilot',
+    url: 'https://copilot.microsoft.com/',
+    icon: 'icons/ai/copilot.svg',
+    exportFormat: 'markdown'
+  },
+  kimi: {
+    id: 'kimi',
+    label: 'Kimi',
+    url: 'https://kimi.moonshot.cn/',
+    icon: 'icons/ai/kimi-color.svg',
+    exportFormat: 'markdown'
+  },
+  mistral: {
+    id: 'mistral',
+    label: 'Mistral',
+    url: 'https://chat.mistral.ai/',
+    icon: 'icons/ai/mistral.svg',
+    exportFormat: 'markdown'
+  },
+  zhipu: {
+    id: 'zhipu',
+    label: 'ZhiPu',
+    url: 'https://chatglm.cn/',
+    icon: 'icons/ai/zhipu.svg',
+    exportFormat: 'markdown'
+  },
+  yuanbao: {
+    id: 'yuanbao',
+    label: 'YuanBao',
+    url: 'https://yuanbao.tencent.com/',
+    icon: 'icons/ai/yuanbao.svg',
+    exportFormat: 'markdown'
+  },
+  stepfun: {
+    id: 'stepfun',
+    label: 'StepFun',
+    url: 'https://yuewen.cn/',
+    icon: 'icons/ai/stepfun.svg',
+    exportFormat: 'markdown'
+  },
+  minimax: {
+    id: 'minimax',
+    label: 'MiniMax',
+    url: 'https://hailuoai.com/',
+    icon: 'icons/ai/minimax.svg',
+    exportFormat: 'markdown'
   }
 };
 
-export const DEFAULT_SELECTIONS = ['chatgpt', 'gemini', 'claude', 'qwen'];
+export const DEFAULT_SELECTIONS = ['chatgpt', 'gemini', 'deepseek', 'grok'];
 
 export const EXTRA_AI_SERVICES = {
   qwen: { hostname: 'chat.qwen.ai' },
   doubao: { hostname: 'www.doubao.com' },
   deepseek: { hostname: 'chat.deepseek.com' },
-  grok: { hostname: 'grok.com' }
+  grok: { hostname: 'grok.com' },
+  copilot: { hostname: 'copilot.microsoft.com' },
+  kimi: { hostname: 'kimi.moonshot.cn' },
+  mistral: { hostname: 'chat.mistral.ai' },
+  zhipu: { hostname: 'chatglm.cn' },
+  yuanbao: { hostname: 'yuanbao.tencent.com' },
+  stepfun: { hostname: 'yuewen.cn' },
+  minimax: { hostname: 'hailuoai.com' }
 };
