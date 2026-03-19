@@ -50,12 +50,18 @@ class QwenInjector extends AIInjector {
     let markdown = '';
     const messages = [];
 
-    // Qwen structure:
-    // User: div.qwen-chat-message-user
-    // AI: div.qwen-chat-message-assistant
-    // Common class: qwen-chat-message (often) or we just query both
-    
-    const messageElements = document.querySelectorAll('div.qwen-chat-message-user, div.qwen-chat-message-assistant');
+    // Strategy 1: Qwen specific class names
+    let messageElements = document.querySelectorAll('div.qwen-chat-message-user, div.qwen-chat-message-assistant');
+
+    // Strategy 2: Try chat-user/assistant wrapper classes
+    if (messageElements.length === 0) {
+      messageElements = document.querySelectorAll('.chat-user-message-wrapper, .chat-assistant-message-wrapper');
+    }
+
+    // Strategy 3: Try data attributes or generic chat message classes
+    if (messageElements.length === 0) {
+      messageElements = document.querySelectorAll('[data-role="user"], [data-role="assistant"], [class*="chat-message"]');
+    }
 
     if (messageElements.length === 0) {
       return super.extractConversation();
@@ -65,16 +71,32 @@ class QwenInjector extends AIInjector {
       let role = 'UNKNOWN';
       let content = '';
 
-      if (element.classList.contains('qwen-chat-message-user')) {
+      const classList = element.classList?.toString()?.toLowerCase() || '';
+      const dataRole = element.getAttribute?.('data-role');
+
+      if (classList.includes('qwen-chat-message-user') || classList.includes('chat-user') || dataRole === 'user') {
         role = 'USER';
-        // Content: p.user-message-content
-        const contentEl = element.querySelector('.user-message-content');
-        if (contentEl) content = contentEl.innerText || contentEl.textContent;
-      } else if (element.classList.contains('qwen-chat-message-assistant')) {
+        // Content: multiple fallback selectors
+        const contentEl = element.querySelector('.user-message-content') ||
+                          element.querySelector('[class*="message-content"]') ||
+                          element.querySelector('p');
+        if (contentEl) {
+          content = contentEl.innerText || contentEl.textContent;
+        } else {
+          content = element.innerText || element.textContent;
+        }
+      } else if (classList.includes('qwen-chat-message-assistant') || classList.includes('chat-assistant') || dataRole === 'assistant') {
         role = 'QWEN';
-        // Content: span.qwen-markdown-text or div.qwen-markdown
-        const contentEl = element.querySelector('.qwen-markdown-text') || element.querySelector('.qwen-markdown');
-        if (contentEl) content = contentEl.innerText || contentEl.textContent;
+        // Content: multiple fallback selectors
+        const contentEl = element.querySelector('.qwen-markdown-text') ||
+                          element.querySelector('.qwen-markdown') ||
+                          element.querySelector('[class*="markdown"]') ||
+                          element.querySelector('.message-content');
+        if (contentEl) {
+          content = contentEl.innerText || contentEl.textContent;
+        } else {
+          content = element.innerText || element.textContent;
+        }
       }
 
       content = content ? content.trim() : '';

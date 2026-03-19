@@ -82,50 +82,103 @@ class DeepSeekInjector extends AIInjector {
     let markdown = '';
     const messages = [];
 
-    // DeepSeek selectors from AI_DOM_STRUCTURE.md
-    // User message container: div.dad65929
-    // AI message container: div._4f9bf79
-    // We select all direct children of the chat container to preserve order
-    // Since we don't know the exact chat container class, we look for these specific message containers
-    const allMessageContainers = document.querySelectorAll('div.dad65929, div._4f9bf79');
+    // Strategy 1: Use stable class names and structure
+    // DeepSeek uses div.ds-markdown for AI responses - this is very stable
+    // Try to find message turn containers
+    const turnContainers = document.querySelectorAll('[class*="chat-message"], [class*="message-item"], [data-role]');
+    
+    if (turnContainers.length > 0) {
+      for (const container of turnContainers) {
+        let role = 'UNKNOWN';
+        let content = '';
 
-    if (allMessageContainers.length === 0) {
-      console.warn('No messages found using DeepSeek specific selectors');
-      // Fallback to default implementation if specific selectors fail
-      return super.extractConversation();
+        const dataRole = container.getAttribute('data-role');
+        const classList = container.classList?.toString()?.toLowerCase() || '';
+
+        if (dataRole === 'user' || classList.includes('user')) {
+          role = 'USER';
+          content = container.innerText || container.textContent;
+        } else if (dataRole === 'assistant' || classList.includes('assistant') || classList.includes('bot')) {
+          role = 'DEEPSEEK';
+          const contentEl = container.querySelector('div.ds-markdown') || container;
+          content = contentEl.innerText || contentEl.textContent;
+        }
+
+        content = content ? content.trim() : '';
+        if (content && role !== 'UNKNOWN') {
+          if (messages.length > 0 && messages[messages.length - 1].role === role) {
+            messages[messages.length - 1].content += '\n\n' + content;
+          } else {
+            messages.push({ role, content });
+          }
+        }
+      }
     }
 
-    for (const container of allMessageContainers) {
-      let role = 'UNKNOWN';
-      let content = '';
+    // Strategy 2: Legacy hash class names (may still work in some versions)
+    if (messages.length === 0) {
+      const allMessageContainers = document.querySelectorAll('div.dad65929, div._4f9bf79');
 
-      if (container.classList.contains('dad65929')) {
-        role = 'USER';
-        // User content: div.fbb737a4
-        const contentEl = container.querySelector('div.fbb737a4');
-        if (contentEl) {
-          content = contentEl.innerText || contentEl.textContent;
-        }
-      } else if (container.classList.contains('_4f9bf79')) {
-        role = 'DEEPSEEK';
-        // AI content: div.ds-markdown span
-        // Or directly div.ds-markdown
-        const contentEl = container.querySelector('div.ds-markdown');
-        if (contentEl) {
-          content = contentEl.innerText || contentEl.textContent;
-        }
-      }
+      if (allMessageContainers.length > 0) {
+        for (const container of allMessageContainers) {
+          let role = 'UNKNOWN';
+          let content = '';
 
-      content = content ? content.trim() : '';
+          if (container.classList.contains('dad65929')) {
+            role = 'USER';
+            const contentEl = container.querySelector('div.fbb737a4') || container;
+            content = contentEl.innerText || contentEl.textContent;
+          } else if (container.classList.contains('_4f9bf79')) {
+            role = 'DEEPSEEK';
+            const contentEl = container.querySelector('div.ds-markdown') || container;
+            content = contentEl.innerText || contentEl.textContent;
+          }
 
-      if (content) {
-        // Consolidate consecutive messages from the same role
-        if (messages.length > 0 && messages[messages.length - 1].role === role) {
-          messages[messages.length - 1].content += '\n\n' + content;
-        } else {
-          messages.push({ role, content });
+          content = content ? content.trim() : '';
+          if (content) {
+            if (messages.length > 0 && messages[messages.length - 1].role === role) {
+              messages[messages.length - 1].content += '\n\n' + content;
+            } else {
+              messages.push({ role, content });
+            }
+          }
         }
       }
+    }
+
+    // Strategy 3: Find ds-markdown elements and walk up to find user messages
+    if (messages.length === 0) {
+      // Get all ds-markdown (AI responses) and try to reconstruct conversation
+      const aiResponses = document.querySelectorAll('div.ds-markdown');
+      if (aiResponses.length > 0) {
+        // Walk the chat container to find alternating user/AI messages
+        // Find a common ancestor that contains both user and AI messages
+        const chatContainer = aiResponses[0].closest('[class*="chat"], [class*="conversation"], main, [role="main"]') || document.body;
+        
+        // Get direct children or message-level containers
+        const allChildren = chatContainer.querySelectorAll(':scope > div > div, :scope > div');
+        
+        for (const child of allChildren) {
+          const hasDsMarkdown = child.querySelector('div.ds-markdown');
+          if (hasDsMarkdown) {
+            const content = hasDsMarkdown.innerText || hasDsMarkdown.textContent;
+            if (content?.trim()) {
+              messages.push({ role: 'DEEPSEEK', content: content.trim() });
+            }
+          } else if (child.textContent?.trim().length > 5 && !child.querySelector('textarea') && !child.querySelector('button[type="submit"]')) {
+            // Potential user message - check it's not a UI element
+            const text = child.textContent.trim();
+            if (text.length < 10000) { // Skip if too long (probably a container)
+              messages.push({ role: 'USER', content: text });
+            }
+          }
+        }
+      }
+    }
+
+    // Fallback to base class
+    if (messages.length === 0) {
+      return super.extractConversation();
     }
 
     // Build markdown

@@ -13,49 +13,6 @@ const AI_LIST = [
   'grok'
 ];
 
-// === Grok Frame Fix ===
-// Inject frame bypass at the EARLIEST possible moment via scripting API.
-// This is earlier than document_start content scripts in MAIN world.
-const GROK_FRAME_FIX_CODE = `
-  try {
-    Object.defineProperty(window, 'parent', {
-      get: function() { return window; }, configurable: false
-    });
-  } catch(e) {}
-  try {
-    Object.defineProperty(window, 'top', {
-      get: function() { return window; }, configurable: false
-    });
-  } catch(e) {}
-  try {
-    Object.defineProperty(window, 'frameElement', {
-      get: function() { return null; }, configurable: false
-    });
-  } catch(e) {}
-`;
-
-chrome.webNavigation.onCommitted.addListener(
-  (details) => {
-    // Only inject into sub_frames (iframes), not top-level tabs
-    if (details.frameId === 0) return;
-
-    chrome.scripting.executeScript({
-      target: { tabId: details.tabId, frameIds: [details.frameId] },
-      func: (code) => {
-        // Create and inject script tag synchronously
-        const s = document.createElement('script');
-        s.textContent = code;
-        (document.documentElement || document.head || document.body).prepend(s);
-        s.remove();
-      },
-      args: [GROK_FRAME_FIX_CODE],
-      injectImmediately: true,
-      world: 'MAIN'
-    }).catch(() => {}); // Silently ignore errors (e.g., if frame already navigated)
-  },
-  { url: [{ hostEquals: 'grok.com' }] }
-);
-
 // Get AI frame state template
 function createAIFrames() {
   const frames = {};
@@ -65,251 +22,52 @@ function createAIFrames() {
   return frames;
 }
 
-// Remove X-Frame-Options headers to allow iframe embedding
+// Allow iframe embedding by modifying response headers.
+// Key insight (from ChatBrawl): SET CSP to allow chrome-extension, don't just remove it.
+// This tells the browser the embedding is legitimate, preventing SecurityError.
+const FRAME_CSP_VALUE = "frame-ancestors 'self' chrome-extension://* moz-extension://*";
+
 function ensureNetRequestRules() {
   console.log('Setting up declarativeNetRequest rules...');
 
+  const sites = [
+    { id: 1, filter: '||chatgpt.com/*' },
+    { id: 2, filter: '||chat.openai.com/*' },
+    { id: 3, filter: '||claude.ai/*' },
+    { id: 4, filter: '||gemini.google.com/*' },
+    { id: 5, filter: '||chat.qwen.ai/*' },
+    { id: 6, filter: '||www.doubao.com/*' },
+    { id: 7, filter: '||doubao.com/*' },
+    { id: 8, filter: '||chat.deepseek.com/*' },
+    { id: 9, filter: '||grok.com/*' },
+    { id: 10, filter: '||grokusercontent.com/*' }
+  ];
+
+  const rules = sites.map(site => ({
+    id: site.id,
+    priority: 1,
+    action: {
+      type: 'modifyHeaders',
+      responseHeaders: [
+        { header: 'X-Frame-Options', operation: 'remove' },
+        { header: 'Frame-Options', operation: 'remove' },
+        { header: 'Content-Security-Policy', operation: 'set', value: FRAME_CSP_VALUE }
+      ]
+    },
+    condition: {
+      urlFilter: site.filter,
+      resourceTypes: ['sub_frame']
+    }
+  }));
+
   chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
-    addRules: [
-      {
-        id: 1,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'X-Frame-Options', operation: 'remove' },
-            { header: 'Frame-Options', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://chatgpt.com/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 2,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'X-Frame-Options', operation: 'remove' },
-            { header: 'Frame-Options', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://chat.openai.com/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 3,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'X-Frame-Options', operation: 'remove' },
-            { header: 'Frame-Options', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://claude.ai/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 4,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'X-Frame-Options', operation: 'remove' },
-            { header: 'Frame-Options', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://gemini.google.com/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 5,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'content-security-policy', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://chatgpt.com/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 6,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'content-security-policy', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://claude.ai/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 7,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'X-Frame-Options', operation: 'remove' },
-            { header: 'Frame-Options', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://chat.qwen.ai/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 8,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'content-security-policy', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://chat.qwen.ai/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 15,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'X-Frame-Options', operation: 'remove' },
-            { header: 'Frame-Options', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://www.doubao.com/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 16,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'content-security-policy', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://www.doubao.com/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 17,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'X-Frame-Options', operation: 'remove' },
-            { header: 'Frame-Options', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://chat.deepseek.com/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 18,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'content-security-policy', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://chat.deepseek.com/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 21,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'X-Frame-Options', operation: 'remove' },
-            { header: 'Frame-Options', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://doubao.com/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 22,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'content-security-policy', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://doubao.com/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 23,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'X-Frame-Options', operation: 'remove' },
-            { header: 'Frame-Options', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://grok.com/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      },
-      {
-        id: 24,
-        priority: 1,
-        action: {
-          type: 'modifyHeaders',
-          responseHeaders: [
-            { header: 'content-security-policy', operation: 'remove' }
-          ]
-        },
-        condition: {
-          urlFilter: '*://grok.com/*',
-          resourceTypes: ['sub_frame', 'main_frame']
-        }
-      }
-    ]
+    removeRuleIds: rules.map(r => r.id),
+    addRules: rules
   });
 
-  console.log('declarativeNetRequest rules configured');
+  console.log('declarativeNetRequest rules configured:', rules.length, 'rules');
 }
+
 
 // Register rules on install/update AND on every service worker startup
 chrome.runtime.onInstalled.addListener(() => ensureNetRequestRules());

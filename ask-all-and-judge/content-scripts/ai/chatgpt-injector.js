@@ -52,12 +52,51 @@ class ChatGPTInjector extends AIInjector {
     let markdown = '';
     const messages = [];
 
-    // ChatGPT structure:
-    // Messages are in 'article' elements with 'data-turn' attribute or 'data-testid'
-    const articles = document.querySelectorAll('article[data-turn]');
+    // Strategy 1: New ChatGPT structure with data-testid
+    let articles = document.querySelectorAll('article[data-testid^="conversation-turn-"]');
 
+    // Strategy 2: Old structure with data-turn attribute
     if (articles.length === 0) {
-      // Fallback to role-based selection if article structure changes
+      articles = document.querySelectorAll('article[data-turn]');
+    }
+
+    // Strategy 3: Use data-message-author-role directly
+    if (articles.length === 0) {
+      const roleElements = document.querySelectorAll('[data-message-author-role]');
+      if (roleElements.length > 0) {
+        for (const el of roleElements) {
+          const dataRole = el.getAttribute('data-message-author-role');
+          let role = 'UNKNOWN';
+          let content = '';
+
+          if (dataRole === 'user') {
+            role = 'USER';
+            const contentEl = el.querySelector('div.whitespace-pre-wrap') || el;
+            content = contentEl.innerText || contentEl.textContent;
+          } else if (dataRole === 'assistant') {
+            role = 'CHATGPT';
+            const contentEl = el.querySelector('div.markdown') ||
+                              el.querySelector('div[class*="markdown"]') || el;
+            content = contentEl.innerText || contentEl.textContent;
+          }
+
+          content = content ? content.trim() : '';
+          if (content) {
+            if (messages.length > 0 && messages[messages.length - 1].role === role) {
+              messages[messages.length - 1].content += '\n\n' + content;
+            } else {
+              messages.push({ role, content });
+            }
+          }
+        }
+
+        for (const msg of messages) {
+          markdown += `### ${msg.role}\n\n${msg.content}\n\n---\n\n`;
+        }
+        return markdown;
+      }
+
+      // Final fallback
       return super.extractConversation();
     }
 
@@ -65,17 +104,24 @@ class ChatGPTInjector extends AIInjector {
       let role = 'UNKNOWN';
       let content = '';
 
+      // Try new data-testid format first, then data-turn
       const turn = article.getAttribute('data-turn');
+      const roleEl = article.querySelector('[data-message-author-role]');
+      const detectedRole = roleEl?.getAttribute('data-message-author-role') || turn;
       
-      if (turn === 'user') {
+      if (detectedRole === 'user') {
         role = 'USER';
-        // Content: div.whitespace-pre-wrap
-        const contentEl = article.querySelector('div.whitespace-pre-wrap');
+        // Content: div.whitespace-pre-wrap (multiple fallbacks)
+        const contentEl = article.querySelector('div.whitespace-pre-wrap') ||
+                          article.querySelector('[data-message-author-role="user"]');
         if (contentEl) content = contentEl.innerText || contentEl.textContent;
-      } else if (turn === 'assistant') {
+      } else if (detectedRole === 'assistant') {
         role = 'CHATGPT';
-        // Content: div.markdown
-        const contentEl = article.querySelector('div.markdown');
+        // Content: div.markdown (multiple fallbacks)
+        const contentEl = article.querySelector('div.markdown') ||
+                          article.querySelector('div[class*="markdown"]') ||
+                          article.querySelector('.prose') ||
+                          article.querySelector('[data-message-author-role="assistant"]');
         if (contentEl) content = contentEl.innerText || contentEl.textContent;
       }
 

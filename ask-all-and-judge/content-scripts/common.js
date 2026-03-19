@@ -913,14 +913,22 @@ class AIInjector {
   // Get selectors for finding conversation messages
   getConversationSelectors() {
     return [
+      // Most reliable: data attributes
       '[data-message-author-role="user"]',
       '[data-message-author-role="assistant"]',
+      '[data-role="user"]',
+      '[data-role="assistant"]',
+      '[data-testid*="message"]',
+      // Structure-based
       '.user-turn',
       '.agent-turn',
       '.font-user-message',
       '.font-claude-message',
+      // Class-based
       '[class*="user-message"]',
       '[class*="assistant-message"]',
+      '[class*="chat-message"]',
+      // Widest fallback
       '[class*="message"]'
     ];
   }
@@ -928,20 +936,24 @@ class AIInjector {
   // Determine the role of a message element
   getMessageRole(element) {
     // Try data attribute first
-    const dataRole = element.getAttribute?.('data-message-author-role');
+    const dataRole = element.getAttribute?.('data-message-author-role') ||
+                     element.getAttribute?.('data-role');
     if (dataRole) {
+      if (dataRole === 'user' || dataRole === 'human') return 'USER';
+      if (dataRole === 'assistant') return this.aiName.toUpperCase();
       return dataRole.toUpperCase();
     }
 
     // Check class names
     const classList = element.classList?.toString()?.toLowerCase() || '';
-    const outerHTML = element.outerHTML?.toLowerCase() || '';
+    const outerHTML = element.outerHTML?.substring(0, 500)?.toLowerCase() || '';
 
     if (classList.includes('user') || classList.includes('human') || outerHTML.includes('user-message')) {
       return 'USER';
     }
     if (classList.includes('assistant') || classList.includes('claude') || classList.includes('gpt') ||
-        outerHTML.includes('assistant-message') || outerHTML.includes('model-response')) {
+        outerHTML.includes('assistant-message') || outerHTML.includes('model-response') ||
+        classList.includes('bot') || classList.includes('ai-response')) {
       return this.aiName.toUpperCase();
     }
 

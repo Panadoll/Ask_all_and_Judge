@@ -53,11 +53,24 @@ class GrokInjector extends AIInjector {
     let markdown = '';
     const messages = [];
 
-    // Try to find message containers
-    // Grok typically wraps messages in containers with role indicators
-    const messageContainers = document.querySelectorAll(
-      '[class*="message"], [data-role], [class*="turn"]'
+    // Strategy 1: Try data-role or message-bubble containers
+    let messageContainers = document.querySelectorAll(
+      '[data-role="user"], [data-role="assistant"], div.message-bubble'
     );
+
+    // Strategy 2: Try class-based turn containers
+    if (messageContainers.length === 0) {
+      messageContainers = document.querySelectorAll(
+        '[class*="turn"], [class*="message-row"], [class*="chat-message"]'
+      );
+    }
+
+    // Strategy 3: Wider class-based search
+    if (messageContainers.length === 0) {
+      messageContainers = document.querySelectorAll(
+        '[class*="message"], [class*="response"]'
+      );
+    }
 
     if (messageContainers.length === 0) {
       return super.extractConversation();
@@ -70,7 +83,7 @@ class GrokInjector extends AIInjector {
       const classList = container.classList?.toString()?.toLowerCase() || '';
       const dataRole = container.getAttribute?.('data-role');
 
-      // Determine role
+      // Determine role using multiple signals
       if (dataRole === 'user' || classList.includes('user')) {
         role = 'USER';
       } else if (dataRole === 'assistant' || classList.includes('assistant') ||
@@ -80,8 +93,11 @@ class GrokInjector extends AIInjector {
 
       if (role === 'UNKNOWN') continue;
 
-      // Extract content - try markdown/prose first, then fallback to text
-      const contentEl = container.querySelector('.markdown, .prose, [class*="markdown"]');
+      // Extract content - try structured content selectors first
+      const contentEl = container.querySelector('.markdown') ||
+                        container.querySelector('.prose') ||
+                        container.querySelector('[class*="markdown"]') ||
+                        container.querySelector('[class*="content"]');
       if (contentEl) {
         content = contentEl.innerText || contentEl.textContent;
       } else {
@@ -90,7 +106,8 @@ class GrokInjector extends AIInjector {
 
       content = content ? content.trim() : '';
 
-      if (content && content.length > 5) {
+      // Filter out very short content (likely UI elements) and very long content (likely containers)
+      if (content && content.length > 5 && content.length < 50000) {
         // Consolidate consecutive messages from the same role
         if (messages.length > 0 && messages[messages.length - 1].role === role) {
           messages[messages.length - 1].content += '\n\n' + content;
@@ -98,6 +115,10 @@ class GrokInjector extends AIInjector {
           messages.push({ role, content });
         }
       }
+    }
+
+    if (messages.length === 0) {
+      return super.extractConversation();
     }
 
     // Build markdown
