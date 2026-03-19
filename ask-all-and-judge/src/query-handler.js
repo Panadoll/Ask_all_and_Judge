@@ -138,7 +138,9 @@ export class QueryHandler {
               type: 'DIRECT_INJECT_QUERY',
               query: query,
               aiName: aiKey,
-              id: requestId
+              id: requestId,
+              searchEnabled: this.state.searchEnabled,
+              thinkingEnabled: this.state.thinkingEnabled
             }, '*');
             sentCount++;
           } catch (e) {

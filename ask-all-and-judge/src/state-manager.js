@@ -18,7 +18,9 @@ class StateManager {
       // UI state
       ui: {
         shouldProtectFocus: true,
-        focusProtectionInterval: null
+        focusProtectionInterval: null,
+        searchEnabled: false,
+        thinkingEnabled: false
       },
 
       // Settings (with validation)
@@ -276,6 +278,27 @@ class StateManager {
 
   set lastQuery(value) {
     this._state.unifiedView.lastQuery = value;
+  }
+
+  // ===== Toolbar State =====
+  get searchEnabled() {
+    return this._state.ui.searchEnabled;
+  }
+
+  set searchEnabled(value) {
+    this._validateBoolean('searchEnabled', value);
+    this._state.ui.searchEnabled = value;
+    this._notify('ui:searchEnabled', value);
+  }
+
+  get thinkingEnabled() {
+    return this._state.ui.thinkingEnabled;
+  }
+
+  set thinkingEnabled(value) {
+    this._validateBoolean('thinkingEnabled', value);
+    this._state.ui.thinkingEnabled = value;
+    this._notify('ui:thinkingEnabled', value);
   }
 
   // ===== Event System =====

@@ -79,6 +79,26 @@ function initialize() {
     setupUnifiedViewResizer();
   }
 
+  // Toolbar toggles (Search / Think)
+  const toolbarSearch = document.getElementById('toolbar-search');
+  const toolbarThinking = document.getElementById('toolbar-thinking');
+  
+  if (toolbarSearch) {
+    toolbarSearch.addEventListener('click', () => {
+      const pressed = toolbarSearch.getAttribute('aria-pressed') === 'true';
+      toolbarSearch.setAttribute('aria-pressed', String(!pressed));
+      state.searchEnabled = !pressed;
+    });
+  }
+  
+  if (toolbarThinking) {
+    toolbarThinking.addEventListener('click', () => {
+      const pressed = toolbarThinking.getAttribute('aria-pressed') === 'true';
+      toolbarThinking.setAttribute('aria-pressed', String(!pressed));
+      state.thinkingEnabled = !pressed;
+    });
+  }
+
   setupMessaging();
 
   setupPanels();

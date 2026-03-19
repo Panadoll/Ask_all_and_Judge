@@ -751,6 +751,53 @@ iframe {
   flex-shrink: 0;
 }
 
+/* Toolbar Toggles (Search / Think) */
+.composer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.toolbar-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out-quart);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.toolbar-toggle svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.toolbar-toggle:hover {
+  border-color: var(--muted);
+  color: var(--ink);
+  background: var(--bg-hover);
+}
+
+.toolbar-toggle[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.toolbar-toggle[aria-pressed="true"] svg {
+  color: white;
+}
+
 /* ===============================================
    Prompt Suggestions
    =============================================== */
