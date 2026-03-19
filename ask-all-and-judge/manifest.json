@@ -21,7 +21,14 @@
     "https://www.doubao.com/*",
     "https://doubao.com/*",
     "https://chat.deepseek.com/*",
-    "https://grok.com/*"
+    "https://grok.com/*",
+    "https://copilot.microsoft.com/*",
+    "https://kimi.moonshot.cn/*",
+    "https://chat.mistral.ai/*",
+    "https://chatglm.cn/*",
+    "https://yuanbao.tencent.com/*",
+    "https://yuewen.cn/*",
+    "https://hailuoai.com/*"
   ],
   "background": {
     "service_worker": "background/service-worker.js"
@@ -74,6 +81,48 @@
     {
       "matches": ["https://grok.com/*"],
       "js": ["content-scripts/common.js", "content-scripts/ai/grok-injector.js"],
+      "all_frames": true,
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://copilot.microsoft.com/*"],
+      "js": ["content-scripts/common.js", "content-scripts/ai/copilot-injector.js"],
+      "all_frames": true,
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://kimi.moonshot.cn/*"],
+      "js": ["content-scripts/common.js", "content-scripts/ai/kimi-injector.js"],
+      "all_frames": true,
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://chat.mistral.ai/*"],
+      "js": ["content-scripts/common.js", "content-scripts/ai/mistral-injector.js"],
+      "all_frames": true,
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://chatglm.cn/*"],
+      "js": ["content-scripts/common.js", "content-scripts/ai/zhipu-injector.js"],
+      "all_frames": true,
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://yuanbao.tencent.com/*"],
+      "js": ["content-scripts/common.js", "content-scripts/ai/yuanbao-injector.js"],
+      "all_frames": true,
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://yuewen.cn/*"],
+      "js": ["content-scripts/common.js", "content-scripts/ai/stepfun-injector.js"],
+      "all_frames": true,
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://hailuoai.com/*"],
+      "js": ["content-scripts/common.js", "content-scripts/ai/minimax-injector.js"],
       "all_frames": true,
       "run_at": "document_idle"
     }

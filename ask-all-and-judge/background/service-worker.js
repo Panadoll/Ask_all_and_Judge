@@ -10,7 +10,14 @@ const AI_LIST = [
   'qwen',
   'deepseek',
   'doubao',
-  'grok'
+  'grok',
+  'copilot',
+  'kimi',
+  'mistral',
+  'zhipu',
+  'yuanbao',
+  'stepfun',
+  'minimax'
 ];
 
 // Get AI frame state template
@@ -40,7 +47,14 @@ function ensureNetRequestRules() {
     { id: 7, filter: '||doubao.com/*' },
     { id: 8, filter: '||chat.deepseek.com/*' },
     { id: 9, filter: '||grok.com/*' },
-    { id: 10, filter: '||grokusercontent.com/*' }
+    { id: 10, filter: '||grokusercontent.com/*' },
+    { id: 11, filter: '||copilot.microsoft.com/*' },
+    { id: 12, filter: '||kimi.moonshot.cn/*' },
+    { id: 13, filter: '||chat.mistral.ai/*' },
+    { id: 14, filter: '||chatglm.cn/*' },
+    { id: 15, filter: '||yuanbao.tencent.com/*' },
+    { id: 16, filter: '||yuewen.cn/*' },
+    { id: 17, filter: '||hailuoai.com/*' }
   ];
 
   const rules = sites.map(site => ({
