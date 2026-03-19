@@ -54,7 +54,6 @@
       <iframe
         id="iframe-panel-1"
         src="https://chatgpt.com"
-        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
         allow="clipboard-read; clipboard-write"
       ></iframe>
     </section>
@@ -105,7 +104,6 @@
       <iframe
         id="iframe-panel-2"
         src="https://claude.ai/new"
-        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
         allow="clipboard-read; clipboard-write"
       ></iframe>
     </section>
@@ -156,7 +154,6 @@
       <iframe
         id="iframe-panel-3"
         src="https://gemini.google.com/app"
-        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
         allow="clipboard-read; clipboard-write"
       ></iframe>
     </section>
@@ -207,7 +204,6 @@
       <iframe
         id="iframe-panel-4"
         src="https://chat.qwen.ai/"
-        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
         allow="clipboard-read; clipboard-write"
       ></iframe>
     </section>
@@ -359,6 +355,21 @@
             <div class="judge-model-selection-title">Select Judge AI</div>
             <div id="judge-model-selection-list" class="judge-model-selection-list"></div>
           </div>
+        </div>
+        <div class="unified-view-wrapper">
+          <button
+            id="unified-view-button"
+            class="unified-view-button"
+            type="button"
+            title="Unified View"
+            aria-label="Unified view"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <line x1="3" y1="9" x2="21" y2="9"/>
+              <line x1="3" y1="15" x2="21" y2="15"/>
+            </svg>
+          </button>
         </div>
         <div class="add-panel-wrapper">
           <button id="add-panel-button" class="add-panel-button" type="button" title="Add panel" aria-expanded="false" aria-haspopup="true">
@@ -656,9 +667,51 @@
     <iframe
       id="judge-iframe"
       src=""
-      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
       allow="clipboard-read; clipboard-write"
     ></iframe>
+  </aside>
+
+  <!-- Unified View Panel -->
+  <aside id="unified-view-panel" class="unified-view-panel" hidden>
+    <div class="unified-view-resizer" aria-hidden="true"></div>
+    <header class="unified-view-header">
+      <button
+        id="unified-view-close-button"
+        class="unified-view-close-button"
+        type="button"
+        aria-label="Close unified view"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </button>
+      <div class="unified-view-title">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <line x1="3" y1="9" x2="21" y2="9"/>
+          <line x1="3" y1="15" x2="21" y2="15"/>
+        </svg>
+        <span>Unified View</span>
+      </div>
+      <button
+        id="unified-view-collect-button"
+        class="unified-view-collect-button"
+        type="button"
+        title="Collect responses from all AIs"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+        <span>Collect</span>
+      </button>
+    </header>
+    <div id="unified-view-content" class="unified-view-content">
+      <div class="uv-empty">
+        <div class="uv-empty-icon">📋</div>
+        <div class="uv-empty-text">Click "Collect" to gather responses from all AI panels.</div>
+      </div>
+    </div>
   </aside>
 
   <script src="src/utils.js" type="module"></script>

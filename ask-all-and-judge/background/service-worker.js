@@ -13,6 +13,49 @@ const AI_LIST = [
   'grok'
 ];
 
+// === Grok Frame Fix ===
+// Inject frame bypass at the EARLIEST possible moment via scripting API.
+// This is earlier than document_start content scripts in MAIN world.
+const GROK_FRAME_FIX_CODE = `
+  try {
+    Object.defineProperty(window, 'parent', {
+      get: function() { return window; }, configurable: false
+    });
+  } catch(e) {}
+  try {
+    Object.defineProperty(window, 'top', {
+      get: function() { return window; }, configurable: false
+    });
+  } catch(e) {}
+  try {
+    Object.defineProperty(window, 'frameElement', {
+      get: function() { return null; }, configurable: false
+    });
+  } catch(e) {}
+`;
+
+chrome.webNavigation.onCommitted.addListener(
+  (details) => {
+    // Only inject into sub_frames (iframes), not top-level tabs
+    if (details.frameId === 0) return;
+
+    chrome.scripting.executeScript({
+      target: { tabId: details.tabId, frameIds: [details.frameId] },
+      func: (code) => {
+        // Create and inject script tag synchronously
+        const s = document.createElement('script');
+        s.textContent = code;
+        (document.documentElement || document.head || document.body).prepend(s);
+        s.remove();
+      },
+      args: [GROK_FRAME_FIX_CODE],
+      injectImmediately: true,
+      world: 'MAIN'
+    }).catch(() => {}); // Silently ignore errors (e.g., if frame already navigated)
+  },
+  { url: [{ hostEquals: 'grok.com' }] }
+);
+
 // Get AI frame state template
 function createAIFrames() {
   const frames = {};
@@ -23,7 +66,7 @@ function createAIFrames() {
 }
 
 // Remove X-Frame-Options headers to allow iframe embedding
-chrome.runtime.onInstalled.addListener(() => {
+function ensureNetRequestRules() {
   console.log('Setting up declarativeNetRequest rules...');
 
   chrome.declarativeNetRequest.updateDynamicRules({
@@ -266,7 +309,11 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 
   console.log('declarativeNetRequest rules configured');
-});
+}
+
+// Register rules on install/update AND on every service worker startup
+chrome.runtime.onInstalled.addListener(() => ensureNetRequestRules());
+ensureNetRequestRules();
 
 // Extension page tab
 let extensionTabId = null;

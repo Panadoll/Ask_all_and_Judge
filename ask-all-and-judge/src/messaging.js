@@ -4,6 +4,7 @@ import { getUIText, showStatus, getModelLabel } from './utils.js';
 import { getActivePanels, getSelectedTargets } from './panels.js';
 import { downloadMarkdown } from './export.js';
 import { finalizeJudgeCollection } from './judge.js';
+import { finalizeUnifiedViewCollection } from './unified-view.js';
 
 export function setupMessaging() {
     chrome.runtime.onMessage.addListener(handleBackgroundMessage);
@@ -55,6 +56,18 @@ function handleWindowMessage(event) {
         const activeCount = getActivePanels().length;
         if (state.collectedConversations.length >= activeCount) {
              finalizeJudgeCollection();
+        }
+        return;
+    }
+
+    if (state.collectingForUnifiedView) {
+        // Collect for unified view
+        state.unifiedViewData.push({ ai: sourceAi, content });
+
+        // Check if we have all needed
+        const activeCount = getActivePanels().length;
+        if (state.unifiedViewData.length >= activeCount) {
+            finalizeUnifiedViewCollection();
         }
         return;
     }

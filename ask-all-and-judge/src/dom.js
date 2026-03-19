@@ -66,6 +66,14 @@ export const DOM = {
   get judgeModelSelectionPopup() { return document.getElementById('judge-model-selection-popup'); },
   get judgeModelSelectionList() { return document.getElementById('judge-model-selection-list'); },
 
+  // Unified View
+  get unifiedViewButton() { return document.getElementById('unified-view-button'); },
+  get unifiedViewPanel() { return document.getElementById('unified-view-panel'); },
+  get unifiedViewCloseButton() { return document.getElementById('unified-view-close-button'); },
+  get unifiedViewCollectButton() { return document.getElementById('unified-view-collect-button'); },
+  get unifiedViewContent() { return document.getElementById('unified-view-content'); },
+  get unifiedViewResizer() { return document.querySelector('.unified-view-resizer'); },
+
   // Dynamic Elements Helpers
   getPanels() {
     return Array.from(document.querySelectorAll('.frame-panel')).map((panel, index) => ({

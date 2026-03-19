@@ -189,6 +189,9 @@ export class QueryHandler {
     this.DOM.sendButton.disabled = true;
 
     try {
+      // Record the query for unified view
+      this.state.lastQuery = query;
+
       // Use direct message passing instead of background service worker
       const response = await this.sendDirectly(query, targets);
       this.handleSuccess(response, targets);

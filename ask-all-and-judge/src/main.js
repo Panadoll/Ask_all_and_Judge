@@ -12,6 +12,7 @@ import { FocusManager } from './ui-behaviors/focus-manager.js';
 import { ComposerResizer } from './ui-behaviors/composer-resizer.js';
 import { QueryHandler } from './query-handler.js';
 import { setupOnboarding } from './onboarding.js';
+import { toggleUnifiedView, closeUnifiedView, collectAndRender, setupUnifiedViewResizer } from './unified-view.js';
 
 function initialize() {
   if (!DOM.sendButton || !DOM.queryInput) return;
@@ -62,6 +63,20 @@ function initialize() {
   }
   if (DOM.judgePanel) {
     setupJudgeAISelector();
+  }
+
+  // Unified View Feature
+  if (DOM.unifiedViewButton) {
+    DOM.unifiedViewButton.addEventListener('click', toggleUnifiedView);
+  }
+  if (DOM.unifiedViewCloseButton) {
+    DOM.unifiedViewCloseButton.addEventListener('click', closeUnifiedView);
+  }
+  if (DOM.unifiedViewCollectButton) {
+    DOM.unifiedViewCollectButton.addEventListener('click', collectAndRender);
+  }
+  if (DOM.unifiedViewResizer) {
+    setupUnifiedViewResizer();
   }
 
   setupMessaging();

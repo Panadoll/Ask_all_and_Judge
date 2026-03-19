@@ -53,6 +53,13 @@ class StateManager {
       // Transfer state
       transfer: {
         state: null
+      },
+
+      // Unified view state
+      unifiedView: {
+        isCollecting: false,
+        data: [],
+        lastQuery: ''
       }
     };
 
@@ -240,6 +247,35 @@ class StateManager {
 
   set transferState(value) {
     this._state.transfer.state = value;
+  }
+
+  // ===== Unified View State =====
+  get collectingForUnifiedView() {
+    return this._state.unifiedView.isCollecting;
+  }
+
+  set collectingForUnifiedView(value) {
+    this._validateBoolean('collectingForUnifiedView', value);
+    this._state.unifiedView.isCollecting = value;
+  }
+
+  get unifiedViewData() {
+    return this._state.unifiedView.data;
+  }
+
+  set unifiedViewData(value) {
+    if (!Array.isArray(value)) {
+      throw new Error('Unified view data must be an array');
+    }
+    this._state.unifiedView.data = value;
+  }
+
+  get lastQuery() {
+    return this._state.unifiedView.lastQuery;
+  }
+
+  set lastQuery(value) {
+    this._state.unifiedView.lastQuery = value;
   }
 
   // ===== Event System =====
